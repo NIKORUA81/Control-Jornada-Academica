@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json", // Es buena práctica heredar los alias
+  "compilerOptions": {
+    "composite": true, // Necesario para las referencias de proyecto
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    
+    // --- CAMBIOS CLAVE ---
+    // "noEmit" debe ser 'false' porque "composite" es 'true'.
+    "noEmit": false, 
+    // "allowImportingTsExtensions" se elimina porque es incompatible con "noEmit: false".
+    // "verbatimModuleSyntax" y otras reglas muy estrictas se eliminan para evitar conflictos.
+    // TypeScript usará las reglas del "extends" o sus valores por defecto.
+  },
+  "include": ["vite.config.ts"]
+}
