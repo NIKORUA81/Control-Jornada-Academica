@@ -5,7 +5,7 @@
  * renderizando dinámicamente la vista seleccionada por el usuario.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react'; // Importar Suspense
 import { AppSidebar } from './AppSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { viewConfig } from '@/config/views';
@@ -40,7 +40,9 @@ export const MainLayout: React.FC = () => {
             </div>
           </header>
           <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <CurrentViewComponent />
+            <Suspense fallback={<div className="flex justify-center items-center h-full">Cargando vista...</div>}>
+              <CurrentViewComponent />
+            </Suspense>
           </main>
         </div>
         {/* --- CORRECCIÓN: Se renderiza el diálogo global --- */}
