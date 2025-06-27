@@ -1,9 +1,13 @@
+import React from 'react'; // Necesario para React.lazy
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { ScheduleManagement } from "@/features/schedules/ScheduleManagement";
 import { UserManagement } from "@/features/userManagement/UserManagement";
-import { SubjectManagement } from "@/features/subjects/SubjectManagement"; // <-- IMPORTA
-import { GroupManagement } from "@/features/groups/GroupManagement";   // <-- IMPORTA
-import { Home, Calendar, Users, BookOpen, GraduationCap } from 'lucide-react'; // <-- AÑADE ÍCONOS
+import { SubjectManagement } from "@/features/subjects/SubjectManagement";
+import { GroupManagement } from "@/features/groups/GroupManagement";
+import { Home, Calendar, Users, BookOpen, GraduationCap, FileText } from 'lucide-react'; // Añadido FileText
+
+// Lazy load ReportPage
+const ReportPage = React.lazy(() => import('@/features/reports/ReportPage'));
 
 export type UserRole = 'DOCENTE' | 'COORDINADOR' | 'ASISTENTE' | 'ADMIN' | 'SUPERADMIN' | 'DIRECTOR';
 
@@ -61,6 +65,13 @@ export const viewConfig: ViewConfig[] = [
     component: GroupManagement,
     allowedRoles: ['COORDINADOR', 'ASISTENTE', 'ADMIN', 'SUPERADMIN'],
     icon: GraduationCap,
+  },
+  {
+    id: 'reports',
+    label: 'Reportes',
+    component: ReportPage, // Usar el componente lazy-loaded
+    allowedRoles: ['ADMIN', 'SUPERADMIN'], // Solo para Admin y Superadmin
+    icon: FileText, // Ícono para reportes
   },
   // Puedes añadir más vistas aquí siguiendo el mismo patrón
 ];
