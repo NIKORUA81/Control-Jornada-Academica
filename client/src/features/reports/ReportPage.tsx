@@ -7,14 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Modality, ScheduleStatus, UserRole } from '@prisma/client';
+import { Modality, ScheduleStatus, UserRole } from '@prisma/client'; 
 import * as XLSX from 'xlsx'; // Importar xlsx
 import { saveAs } from 'file-saver'; // Importar file-saver
 
 // Importar servicios API
 import { getUsers, type ApiUser } from '@/api/userService';
-import { getSubjects, type Subject } from '@/api/subjectService';
-import { getGroups, type Group } from '@/api/groupService';
+import { getSubjects, type Subject } from '@/api/subjectService'; 
+import { getGroups, type Group } from '@/api/groupService'; 
 import { getFilteredSchedules, type ApiSchedule, type ScheduleFilters } from '@/api/scheduleService';
 
 // Valores iniciales para los filtros
@@ -37,23 +37,23 @@ export const ReportPage: React.FC = () => {
   const queryClient = useQueryClient();
 
   // Obtener datos para los dropdowns de los filtros
-  const { data: usersData, isLoading: isLoadingUsers } = useQuery<ApiUser[]>({
+  const { data: usersData, isLoading: isLoadingUsers } = useQuery<ApiUser[]>({ 
     queryKey: ['usersForReportFilters'], // Clave diferente para no interferir con otras listas de usuarios
-    queryFn: getUsers
+    queryFn: getUsers 
   });
-  const { data: subjectsData, isLoading: isLoadingSubjects } = useQuery<Subject[]>({
-    queryKey: ['subjectsForReportFilters'],
-    queryFn: getSubjects
+  const { data: subjectsData, isLoading: isLoadingSubjects } = useQuery<Subject[]>({ 
+    queryKey: ['subjectsForReportFilters'], 
+    queryFn: getSubjects 
   });
-  const { data: groupsData, isLoading: isLoadingGroups } = useQuery<Group[]>({
-    queryKey: ['groupsForReportFilters'],
-    queryFn: getGroups
+  const { data: groupsData, isLoading: isLoadingGroups } = useQuery<Group[]>({ 
+    queryKey: ['groupsForReportFilters'], 
+    queryFn: getGroups 
   });
 
   // Query para obtener los datos del reporte. Se ejecutará manualmente.
-  const {
-    data: fetchedReportData,
-    isLoading: isLoadingReport,
+  const { 
+    data: fetchedReportData, 
+    isLoading: isLoadingReport, 
     isError: isErrorReport,
     error: reportError,
     refetch: fetchReportData, // Función para re-ejecutar la query
@@ -107,7 +107,7 @@ export const ReportPage: React.FC = () => {
     // Los filtros actuales ya están en el estado `filters` y son parte de la `queryKey`.
     // Si la queryKey cambia (porque los filtros cambian) y la query está habilitada, se re-ejecutaría.
     // Pero como está `enabled: false`, necesitamos `refetch`.
-    fetchReportData();
+    fetchReportData(); 
   };
 
   const handleClearFilters = () => {
@@ -121,7 +121,7 @@ export const ReportPage: React.FC = () => {
   const handleExportToExcel = () => {
     if (reportData.length === 0) {
       // Idealmente, este botón estaría deshabilitado, pero como doble check:
-      alert("No hay datos para exportar.");
+      alert("No hay datos para exportar."); 
       return;
     }
     setIsExporting(true);
@@ -144,12 +144,12 @@ export const ReportPage: React.FC = () => {
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(dataForExcel);
-
+      
       // Ajustar anchos de columnas (opcional, pero mejora la legibilidad)
       const columnKeys = Object.keys(dataForExcel[0] || {});
       const columnWidths = columnKeys.map(key => {
         const maxLength = Math.max(
-          key.length,
+          key.length, 
           ...dataForExcel.map(row => String(row[key as keyof typeof row]).length)
         );
         return { wch: maxLength + 2 }; // +2 para un pequeño padding
@@ -161,7 +161,7 @@ export const ReportPage: React.FC = () => {
 
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
       const dataBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-
+      
       const today = new Date();
       const fileName = `ReporteHorarios_${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}.xlsx`;
       saveAs(dataBlob, fileName);
@@ -173,7 +173,7 @@ export const ReportPage: React.FC = () => {
       setIsExporting(false);
     }
   };
-
+  
   // Mensaje para la sección de resultados
   let resultsMessage = "Los datos del reporte se mostrarán aquí después de aplicar los filtros.";
   if (isLoadingReport) {
@@ -190,7 +190,7 @@ export const ReportPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8 space-y-6">
       <h1 className="text-3xl font-bold">Generación de Reportes</h1>
-
+      
       <Card>
         <CardHeader>
           <CardTitle>Filtros del Reporte</CardTitle>
@@ -200,9 +200,9 @@ export const ReportPage: React.FC = () => {
             {/* Filtro Docente */}
             <div>
               <Label htmlFor="teacher-filter">Docente</Label>
-              <Select
-                id="teacher-filter"
-                value={filters.teacherId}
+              <Select 
+                id="teacher-filter" 
+                value={filters.teacherId} 
                 onValueChange={(value) => handleFilterChange('teacherId', value)}
               >
                 <SelectTrigger><SelectValue placeholder="Seleccionar docente" /></SelectTrigger>
@@ -218,8 +218,8 @@ export const ReportPage: React.FC = () => {
             {/* Filtro Mes */}
             <div>
               <Label htmlFor="month-filter">Mes</Label>
-              <Select
-                id="month-filter"
+              <Select 
+                id="month-filter" 
                 value={filters.month}
                 onValueChange={(value) => handleFilterChange('month', value)}
               >
@@ -249,7 +249,7 @@ export const ReportPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-
+            
             {/* Filtro Asignatura */}
             <div>
               <Label htmlFor="subject-filter">Asignatura</Label>
@@ -334,12 +334,12 @@ export const ReportPage: React.FC = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Resultados del Reporte</CardTitle>
-          <Button
-            onClick={handleExportToExcel}
+          <Button 
+            onClick={handleExportToExcel} 
             disabled={isLoadingReport || reportData.length === 0 || isExporting}
           >
             {isExporting ? 'Exportando...' : 'Exportar a Excel'}
-          </Button>
+          </Button> 
         </CardHeader>
         <CardContent>
           {isLoadingReport && <p>Cargando resultados...</p>}
@@ -380,7 +380,7 @@ export const ReportPage: React.FC = () => {
                       <TableCell><Badge variant="outline">{schedule.modalidad}</Badge></TableCell>
                       <TableCell>{schedule.aula || '-'}</TableCell>
                       <TableCell>
-                        <Badge
+                        <Badge 
                           variant={
                             schedule.estado === ScheduleStatus.COMPLETADO ? 'success' :
                             schedule.estado === ScheduleStatus.CANCELADO ? 'destructive' :
@@ -409,7 +409,7 @@ export const ReportPage: React.FC = () => {
 const formatMinutesToHHMM = (totalMinutes: number | undefined | null): string => {
   if (totalMinutes == null || totalMinutes < 0 || totalMinutes > 1439) {
     // Podríamos retornar '-' o 'N/A' o incluso string vacío si se prefiere
-    return '--:--';
+    return '--:--'; 
   }
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
