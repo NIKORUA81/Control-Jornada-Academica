@@ -2,8 +2,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateUser } from '@/api/userService'; // ApiUser se importa desde userService si es necesario, pero no se usa directamente aquí.
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { UserEditForm } from './UserEditForm'; // Correcto: Usar UserEditForm
-import { type UpdateUserFormData } from './userSchemas';
+import { UserEditForm } from './UserEditForm';
+import { type UpdateUserFormData } from './userSchemas'; // Importar solo el tipo necesario
 import { useDialogStore } from '@/stores/dialogStore';
 
 export const UserEditDialog = () => {
