@@ -15,10 +15,6 @@
   "author": "Nicolá Rúa",
   "license": "ISC",
   "devDependencies": {
-    "@types/exceljs": "^0.5.3",
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "exceljs": "^4.4.0"
   }
 }

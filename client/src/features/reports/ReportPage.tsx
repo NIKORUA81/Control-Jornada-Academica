@@ -9,12 +9,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Modality, ScheduleStatus, UserRole } from '@/types/enums';
 import ExcelJS from 'exceljs'; // CAMBIO: Importar ExcelJS
-import { saveAs } from 'file-saver'; 
+import { saveAs } from 'file-saver';
 
 // Importar servicios API
 import { getUsers, type ApiUser } from '@/api/userService';
-import { getSubjects, type ApiSubject } from '@/api/subjectService'; 
-import { getGroups, type ApiGroup } from '@/api/groupService';     
+import { getSubjects, type ApiSubject } from '@/api/subjectService';
+import { getGroups, type ApiGroup } from '@/api/groupService';
 import { getFilteredSchedules, type ApiSchedule, type ScheduleFilters } from '@/api/scheduleService';
 
 const initialFilters: ScheduleFilters = {
@@ -31,29 +31,29 @@ export const ReportPage: React.FC = () => {
   const [filters, setFilters] = useState<ScheduleFilters>(initialFilters);
   const [reportData, setReportData] = useState<ApiSchedule[]>([]);
   const [isReportGenerated, setIsReportGenerated] = useState(false);
-  const [isExporting, setIsExporting] = useState(false); 
+  const [isExporting, setIsExporting] = useState(false);
 
-  const { data: usersData, isLoading: isLoadingUsersQuery } = useQuery<ApiUser[]>({ 
-    queryKey: ['usersForReportFilters'], 
-    queryFn: getUsers 
+  const { data: usersData, isLoading: isLoadingUsersQuery } = useQuery<ApiUser[]>({
+    queryKey: ['usersForReportFilters'],
+    queryFn: getUsers
   });
-  const { data: subjectsData, isLoading: isLoadingSubjectsQuery } = useQuery<ApiSubject[]>({ 
-    queryKey: ['subjectsForReportFilters'], 
-    queryFn: getSubjects 
+  const { data: subjectsData, isLoading: isLoadingSubjectsQuery } = useQuery<ApiSubject[]>({
+    queryKey: ['subjectsForReportFilters'],
+    queryFn: getSubjects
   });
-  const { data: groupsData, isLoading: isLoadingGroupsQuery } = useQuery<ApiGroup[]>({ 
-    queryKey: ['groupsForReportFilters'], 
-    queryFn: getGroups 
+  const { data: groupsData, isLoading: isLoadingGroupsQuery } = useQuery<ApiGroup[]>({
+    queryKey: ['groupsForReportFilters'],
+    queryFn: getGroups
   });
 
-  const { 
-    data: queryResultData, 
-    isLoading: isLoadingReport, 
+  const {
+    data: queryResultData,
+    isLoading: isLoadingReport,
     isError: isErrorReport,
     error: reportError,
     refetch: fetchReportData,
-  } = useQuery<ApiSchedule[], Error>({ 
-    queryKey: ['filteredSchedulesReport', filters], 
+  } = useQuery<ApiSchedule[], Error>({
+    queryKey: ['filteredSchedulesReport', filters],
     queryFn: async () => {
       console.log('[QUERY_FN] Ejecutando getFilteredSchedules con filtros:', filters);
       try {
@@ -62,7 +62,7 @@ export const ReportPage: React.FC = () => {
         return data;
       } catch (error) {
         console.error('[QUERY_FN] Error en getFilteredSchedules:', error);
-        throw error; 
+        throw error;
       }
     },
     enabled: false,
@@ -90,18 +90,18 @@ export const ReportPage: React.FC = () => {
   const handleFilterChange = (filterName: keyof ScheduleFilters, value: string) => {
     console.log(`[FILTER_CHANGE] ${filterName}: ${value}`);
     setFilters(prev => ({ ...prev, [filterName]: value }));
-    setIsReportGenerated(false); 
-    setReportData([]); 
+    setIsReportGenerated(false);
+    setReportData([]);
   };
 
   const handleApplyFilters = async () => {
     console.log('[APPLY_FILTERS] Iniciando aplicación de filtros...', filters);
-    setIsReportGenerated(false); 
-    setReportData([]);           
+    setIsReportGenerated(false);
+    setReportData([]);
 
     try {
       console.log('[APPLY_FILTERS] Llamando a fetchReportData...');
-      const result = await fetchReportData(); 
+      const result = await fetchReportData();
       console.log('[APPLY_FILTERS] Resultado de fetchReportData:', result);
 
       if (result.isSuccess && result.data) {
@@ -113,7 +113,7 @@ export const ReportPage: React.FC = () => {
     } catch (e) {
       console.error('[APPLY_FILTERS] Excepción no controlada al llamar a fetchReportData:', e);
     } finally {
-      setIsReportGenerated(true); 
+      setIsReportGenerated(true);
       console.log('[APPLY_FILTERS] Proceso de aplicación de filtros finalizado.');
     }
   };
@@ -124,10 +124,10 @@ export const ReportPage: React.FC = () => {
     setReportData([]);
     setIsReportGenerated(false);
   };
-  
-  const handleExportToExcel = async () => {
+
+  const handleExportToExcel = () => {
     if (reportData.length === 0) {
-      alert("No hay datos para exportar."); 
+      alert("No hay datos para exportar.");
       return;
     }
     setIsExporting(true);
@@ -166,7 +166,7 @@ export const ReportPage: React.FC = () => {
         fgColor: { argb: 'FF0078D4' }, // Azul
       };
       worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
-      
+
       // Aplicar borde a las celdas de cabecera
       worksheet.getRow(1).eachCell(cell => {
         cell.border = {
@@ -209,12 +209,12 @@ export const ReportPage: React.FC = () => {
           });
         }
       });
-      
+
       const buffer = await workbook.xlsx.writeBuffer();
-      const dataBlob = new Blob([buffer], { 
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" 
+      const dataBlob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"
       });
-      
+
       const today = new Date();
       const fileName = `ReporteHorarios_${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}.xlsx`;
       saveAs(dataBlob, fileName);
@@ -232,7 +232,7 @@ export const ReportPage: React.FC = () => {
   if (isLoadingReport) {
     resultsMessage = "Generando reporte...";
   } else if (isReportGenerated) {
-    if (isErrorReport && reportError) { 
+    if (isErrorReport && reportError) {
       resultsMessage = `Error al generar el reporte: ${reportError.message || 'Error desconocido'}`;
     } else if (reportData.length === 0) {
       resultsMessage = "No se encontraron datos para los filtros seleccionados.";
@@ -250,8 +250,8 @@ export const ReportPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div>
               <Label htmlFor="teacher-filter">Docente</Label>
-              <Select 
-                value={filters.teacherId} 
+              <Select
+                value={filters.teacherId}
                 onValueChange={(value) => handleFilterChange('teacherId', value)}
                 disabled={isLoadingUsersQuery || isLoadingReport}
               >
@@ -266,7 +266,7 @@ export const ReportPage: React.FC = () => {
             </div>
             <div>
               <Label htmlFor="month-filter">Mes</Label>
-              <Select 
+              <Select
                 value={filters.month}
                 onValueChange={(value) => handleFilterChange('month', value)}
                 disabled={isLoadingReport}
@@ -382,12 +382,12 @@ export const ReportPage: React.FC = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Resultados del Reporte</CardTitle>
-          <Button 
-            onClick={handleExportToExcel} 
+          <Button
+            onClick={handleExportToExcel}
             disabled={isLoadingReport || reportData.length === 0 || isExporting}
           >
             {isExporting ? 'Exportando...' : 'Exportar a Excel'}
-          </Button> 
+          </Button>
         </CardHeader>
         <CardContent>
           {isLoadingReport && <p>Cargando resultados...</p>}
@@ -424,12 +424,12 @@ export const ReportPage: React.FC = () => {
                       <TableCell><Badge variant="outline">{schedule.modalidad}</Badge></TableCell>
                       <TableCell>{schedule.aula || '-'}</TableCell>
                       <TableCell>
-                        <Badge 
-                          variant={ 
-                            schedule.estado === ScheduleStatus.COMPLETADO ? "default" : 
+                        <Badge
+                          variant={
+                            schedule.estado === ScheduleStatus.COMPLETADO ? "default" :
                             schedule.estado === ScheduleStatus.CANCELADO ? 'destructive' :
-                            schedule.estado === ScheduleStatus.EN_CURSO ? 'outline' : 
-                            'secondary' 
+                            schedule.estado === ScheduleStatus.EN_CURSO ? 'outline' :
+                            'secondary'
                           }
                         >
                           {schedule.estado.replace('_', ' ')}
@@ -450,7 +450,7 @@ export const ReportPage: React.FC = () => {
 
 const formatMinutesToHHMM = (totalMinutes: number | undefined | null): string => {
   if (totalMinutes == null || totalMinutes < 0 || totalMinutes > 1439) {
-    return '--:--'; 
+    return '--:--';
   }
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
