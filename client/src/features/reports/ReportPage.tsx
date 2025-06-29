@@ -125,7 +125,7 @@ export const ReportPage: React.FC = () => {
     setIsReportGenerated(false);
   };
   
-  const handleExportToExcel = () => {
+  const handleExportToExcel = async () => {
     if (reportData.length === 0) {
       alert("No hay datos para exportar."); 
       return;
