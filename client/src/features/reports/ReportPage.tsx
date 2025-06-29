@@ -7,9 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Modality, ScheduleStatus, UserRole } from '@prisma/client';
-import * as XLSX from 'xlsx'; // Importar xlsx
-import { saveAs } from 'file-saver'; // Importar file-saver
+import { Modality, ScheduleStatus, UserRole } from '@/types/enums'; // CAMBIO DE IMPORTACIÓN
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 // Importar servicios API
 import { getUsers, type ApiUser } from '@/api/userService';
