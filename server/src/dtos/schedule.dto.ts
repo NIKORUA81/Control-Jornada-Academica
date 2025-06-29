@@ -49,7 +49,10 @@ export const createScheduleSchema = z.object({
 
 export type CreateScheduleDto = z.infer<typeof createScheduleSchema>;
 
-export const updateScheduleSchema = createScheduleSchema.partial().refine(
+// Definir updateScheduleSchema en dos pasos para posible mitigación de problemas de transpilación/referencia
+const baseUpdateSchema = createScheduleSchema.partial();
+
+export const updateScheduleSchema = baseUpdateSchema.refine(
   (data) => {
     // Si ambas horas están presentes, deben ser lógicas.
     if (data.hora_inicio !== undefined && data.hora_fin !== undefined) {
