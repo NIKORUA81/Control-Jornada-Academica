@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import type { CreateUserFormData, UpdateUserFormData } from '@/features/userManagement/components/userSchemas';
+import type { UserRole } from '@/types/enums'; // Importar UserRole
 
 // Define la estructura de los datos de un usuario que vienen de la API
 export interface ApiUser {
@@ -7,10 +8,10 @@ export interface ApiUser {
     fullName: string;
     username: string;
     email: string;
-    role: string; // Debería ser compatible con los valores de Zod Enum: 'DOCENTE', 'COORDINADOR', etc.
+    role: UserRole; // Usar el enum UserRole para mayor type safety
     isActive: boolean;
-    createdAt: string; // Podría ser Date si se transforma
-    updatedAt?: string; // Podría ser Date
+    createdAt: string;
+    updatedAt?: string;
 }
 
 // Payload para la creación, sin confirmPassword
