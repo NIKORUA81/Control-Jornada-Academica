@@ -1,18 +1,17 @@
 // client/src/features/userManagement/components/UserCreateDialog.tsx
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { UserForm } from './UserForm'; // Asumimos que UserForm será adaptado
-import { createUserSchema, type CreateUserFormData } from './userSchemas';
+import { UserCreateForm } from './UserCreateForm'; // CAMBIO: Usar UserCreateForm
+import { type CreateUserFormData } from './userSchemas'; // Solo el tipo es necesario aquí
 import { useDialogStore } from '@/stores/dialogStore';
-import { createUser } from '@/api/userService'; // Necesitaremos crear esta función y el endpoint
+import { createUser, type CreateUserPayload } from '@/api/userService'; // Importar CreateUserPayload
 
 export const UserCreateDialog = () => {
   const queryClient = useQueryClient();
   const { isUserCreateDialogOpen, closeAllDialogs } = useDialogStore();
 
   const createUserMutation = useMutation({
-    // Especificamos el tipo de los datos de entrada para la mutación
-    mutationFn: (data: Omit<CreateUserFormData, 'confirmPassword'>) => createUser(data),
+    mutationFn: (data: CreateUserPayload) => createUser(data), // Usar CreateUserPayload
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       closeAllDialogs();
@@ -54,16 +53,14 @@ export const UserCreateDialog = () => {
         </DialogHeader>
         {/*
           UserForm necesitará ser adaptado para recibir 'mode', 'schema',
-          y manejar los nuevos campos (email, username, password).
           El 'onSubmit' que se pasa aquí ya espera CreateUserFormData.
         */}
-        <UserForm
-          mode="create"
+        <UserCreateForm // CAMBIO: Usar UserCreateForm
           onSubmit={handleFormSubmit}
           onCancel={closeAllDialogs}
           isSubmitting={createUserMutation.isPending}
-          schema={createUserSchema}
-          defaultValues={{ email: '', username: '', fullName: '', password: '', confirmPassword: '', role: 'DOCENTE' }}
+          // defaultValues se pueden omitir si el formulario maneja sus propios defaults, o pasarlos explícitamente
+          // defaultValues={{ email: '', username: '', fullName: '', password: '', confirmPassword: '', role: UserRole.DOCENTE }}
         />
       </DialogContent>
     </Dialog>

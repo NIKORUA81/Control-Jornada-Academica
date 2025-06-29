@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateUser, type ApiUser } from '@/api/userService'; // ApiUser ya se importa aquí
+import { updateUser, type ApiUser } from '@/api/userService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { UserForm } from './UserForm';
-import { updateUserSchema, type UpdateUserFormData } from './userSchemas'; // Importar esquema y tipo
+import { UserEditForm } from './UserEditForm'; // CAMBIO: Usar UserEditForm
+import { type UpdateUserFormData } from './userSchemas'; // Solo el tipo es necesario
 import { useDialogStore } from '@/stores/dialogStore';
+// updateUserSchema se importa y usa dentro de UserEditForm
 
 export const UserEditDialog = () => {
   const queryClient = useQueryClient();
@@ -47,18 +48,15 @@ export const UserEditDialog = () => {
             Modifique los detalles del usuario. El correo y nombre de usuario no son editables aquí.
           </DialogDescription>
         </DialogHeader>
-        <UserForm
-          mode="edit" // Especificar el modo
-          schema={updateUserSchema} // Pasar el esquema de actualización
+        <UserEditForm // CAMBIO: Usar UserEditForm
           onSubmit={handleFormSubmit}
           onCancel={closeAllDialogs}
           isSubmitting={updateUserMutation.isPending}
-          defaultValues={{ // Asegurar que estos valores coincidan con UpdateUserFormData
+          defaultValues={{
             fullName: editingUser.fullName,
-            role: editingUser.role, // El tipo de role en ApiUser debería ser compatible
-            // Si updateUserSchema incluyera email/username (opcionales), se podrían añadir:
-            // email: editingUser.email,
-            // username: editingUser.username,
+            role: editingUser.role,
+            // Si UserEditForm manejara isActive, se pasaría aquí:
+            // isActive: editingUser.isActive,
           }}
         />
       </DialogContent>
