@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateUser, type ApiUser } from '@/api/userService'; // ApiUser ya se importa aquí
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { UserEditForm } from './UserEditForm';
 import { UserForm } from './UserForm';
 import { updateUserSchema, type UpdateUserFormData } from './userSchemas'; // Importar esquema y tipo
 import { useDialogStore } from '@/stores/dialogStore';
