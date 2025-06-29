@@ -24,6 +24,14 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+
+    /* Variables para Sidebar (basadas en card/background por defecto) */
+    --sidebar: 0 0% 100%; /* Igual que --card */
+    --sidebar-foreground: 224 76% 10%; /* Igual que --card-foreground */
+    --sidebar-border: 214.3 31.8% 91.4%; /* Igual que --border */
+    --sidebar-accent: 210 40% 96.1%; /* Igual que --accent */
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%; /* Igual que --accent-foreground */
+    --sidebar-ring: 221.2 83.2% 53.3%; /* Igual que --ring */
   }
 
   .dark {
@@ -46,6 +54,14 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 217.2 91.2% 59.8%;
+
+    /* Variables para Sidebar en modo oscuro (basadas en card/background oscuro) */
+    --sidebar: 224 71% 14%; /* Igual que --card oscuro */
+    --sidebar-foreground: 0 0% 98%; /* Igual que --card-foreground oscuro */
+    --sidebar-border: 217.2 32.6% 17.5%; /* Igual que --border oscuro */
+    --sidebar-accent: 217.2 32.6% 17.5%; /* Igual que --accent oscuro */
+    --sidebar-accent-foreground: 0 0% 98%; /* Igual que --accent-foreground oscuro */
+    --sidebar-ring: 217.2 91.2% 59.8%; /* Igual que --ring oscuro */
   }
 }
 
