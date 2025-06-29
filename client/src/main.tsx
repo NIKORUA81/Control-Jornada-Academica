@@ -20,7 +20,7 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme"> {/* Cambiado a light */}
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <App />
