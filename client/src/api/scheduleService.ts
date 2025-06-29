@@ -54,7 +54,19 @@ export const markScheduleAsComplete = async (scheduleId: string): Promise<ApiSch
 // --- FUNCIÓN FALTANTE AÑADIDA Y EXPORTADA ---
 // El tipo 'any' para scheduleData debería ser reemplazado por un DTO del frontend
 // ej. ClientCreateScheduleDto que se mapea a CreateScheduleDto del backend
-export const createSchedule = async (scheduleData: any): Promise<ApiSchedule> => {
+export interface ClientCreateSchedulePayload {
+  fecha: string; // YYYY-MM-DD string
+  hora_inicio: number; // minutos
+  hora_fin: number; // minutos
+  modalidad: string; // Debería ser uno de los valores del enum Modality
+  aula?: string | null;
+  teacherId: string; // UUID
+  subjectId: string; // UUID
+  groupId: string; // UUID
+  observaciones?: string | null;
+}
+
+export const createSchedule = async (scheduleData: ClientCreateSchedulePayload): Promise<ApiSchedule> => {
   const response = await apiClient.post('/schedules', scheduleData);
   return response.data;
 };
