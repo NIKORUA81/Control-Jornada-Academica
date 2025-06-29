@@ -1,5 +1,5 @@
 // client/src/features/userManagement/components/UserCreateForm.tsx
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form'; // Importación de tipo para SubmitHandler
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
