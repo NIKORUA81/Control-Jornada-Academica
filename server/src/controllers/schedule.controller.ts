@@ -8,7 +8,7 @@ import {
   deleteScheduleService,
   getFilteredSchedulesService // Importar el nuevo servicio
 } from '../services/schedule.service';
-import { CreateScheduleDto, UpdateScheduleDto } from '../dtos/schedule.dto';
+import { CreateSchedule, UpdateScheduleDto } from '../dtos/schedule.dto';
 import { ScheduleReportFilterDto } from '../dtos/scheduleReportFilter.dto'; // DTO para filtros
 import { Prisma } from '@prisma/client';
 
@@ -39,7 +39,7 @@ export const getScheduleByIdController = async (req: Request, res: Response) => 
 export const createScheduleController = async (req: Request, res: Response) => {
   try {
     // req.body ya es CreateScheduleDto gracias al middleware de validación que se aplicará en las rutas
-    const scheduleData: CreateScheduleDto = req.body;
+    const scheduleData: CreateSchedule = req.body;
     const newSchedule = await createScheduleService(scheduleData);
     res.status(201).json(newSchedule);
   } catch (error: any) {

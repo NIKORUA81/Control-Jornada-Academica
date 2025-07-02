@@ -1,23 +1,32 @@
 import prisma from '../config/database';
 import { Schedule, Prisma } from '@prisma/client'; // Importar Prisma para tipos de input si es necesario
-import { CreateScheduleDto, UpdateScheduleDto } from '../dtos/schedule.dto'; // Importar nuestros DTOs
+import { CreateSchedule, UpdateScheduleDto } from '../dtos/schedule.dto'; // Importar nuestros DTOs
 
 export const getSchedulesService = async () => {
-  return await prisma.schedule.findMany({
-    orderBy: { fecha: 'desc' },
+  const schedules = await prisma.schedule.findMany({
+    orderBy: { fecha: "desc" },
     include: {
-      teacher: { select: { id:true, fullName: true } }, // Devolver ID también puede ser útil
-      subject: { select: { id:true, name: true, code: true } },
-      group: { select: { id:true, name: true } },
+      teacher: { select: { id: true, fullName: true } },
+      subject: { select: { id: true, name: true, code: true } },
+      group: { select: { id: true, name: true } },
     },
   });
-  // Los campos hora_inicio y hora_fin se devolverán como enteros (minutos)
+
+  // Validar si faltan relaciones
+  return schedules.map((s) => ({
+    ...s,
+    teacher: s.teacher ?? { id: "N/A", fullName: "Sin asignar" },
+    subject: s.subject ?? { id: "N/A", name: "Sin asignar", code: "---" },
+    group: s.group ?? { id: "N/A", name: "Sin asignar" },
+  }));
 };
+
+  // Los campos hora_inicio y hora_fin se devolverán como enteros (minutos)
 
 // Crea un nuevo cronograma
 // 'data' ya viene validada y con los tipos correctos desde el controlador (gracias al DTO y middleware)
 // fecha es Date, hora_inicio y hora_fin son number (minutos)
-export const createScheduleService = async (data: CreateScheduleDto): Promise<Schedule> => {
+export const createScheduleService = async (data: CreateSchedule): Promise<Schedule> => {
   // Los campos en CreateScheduleDto (fecha, hora_inicio, hora_fin, modalidad, aula, teacherId, subjectId, groupId, observaciones)
   // coinciden con lo que Prisma espera para la creación, asumiendo que los nombres de campo son los mismos.
   // Prisma tomará los valores por defecto para 'estado', 'cumplido', etc., según el schema.prisma.

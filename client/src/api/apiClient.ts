@@ -25,3 +25,5 @@ apiClient.interceptors.request.use(
 );
 
 export default apiClient;
+
+localStorage.getItem('authToken')
